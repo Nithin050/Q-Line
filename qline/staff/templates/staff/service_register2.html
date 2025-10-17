@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register business 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        nav {
+            background-color: #343a40;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+        }
+
+        nav h1 {
+            color: white;
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #d4e6f1;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.35);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #212529;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            background: #f8f9fa;
+            color: #212529;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .back-btn {
+            display: inline-block;
+            text-align: center;
+            margin-top: 12px;
+            padding: 10px;
+            width: 100%;
+            background-color: #007bff;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .note {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h1>Q-Line Staff</h1>
+        <ul>
+            <li><a href="{% url 'main' %}">Home</a></li>
+            <li><a href="{% url 'service_register' %}">Register</a></li>
+        </ul>
+    </nav>
+    <section class="form-section">
+        <div class="container">
+            <h2>Register Business - Step 2</h2>
+            <form method="post" action="{% url 'service_register2' %}">
+                {% csrf_token %}
+
+                <label>Email:</label>
+                <input type="email" name="email" placeholder="Enter your email"
+                    value="{{ request.POST.email|default:'' }}" required>
+                {% if email_error %}
+                <p style="color:red; font-size:14px;">{{ email_error }}</p>
+                {% endif %}
+
+                <label>Password:</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+
+                <label>Confirm Password:</label>
+                <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                {% if confirm_error %}
+                <p style="color:red; font-size:14px;">{{ confirm_error }}</p>
+                {% endif %}
+
+                <button type="submit">Register</button>
+            </form>
+
+
+            <form method="get" action="{% url 'service_register' %}">
+                <button type="submit">Back</button>
+            </form>
+
+        </div>
+    </section>
+</body>
+
+</html>

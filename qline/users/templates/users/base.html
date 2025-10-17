@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard | Q-Line</title>
+    
+    <link rel="stylesheet" href="{% static 'users/css/base.css' %}"> {% block extra_css %}
+    {% endblock %}
+</head>
+<body>
+    <nav>
+        <h1>Q-Line</h1>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">Home</a></li>
+            <li><a href="{% url 'book_appointment' %}">Book Appointment</a></li>
+            <li><a href="{% url 'active_appointment' %}">Active Appointments</a></li>
+            <li><a href="{% url 'history' %}">History</a></li>
+            <li><a href="{% url 'user_logout' %}" onclick="return confirm('Are you sure you want to logout?');">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

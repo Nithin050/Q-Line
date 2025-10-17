@@ -1,0 +1,116 @@
+{% extends "staff/base.html" %}
+{% block title %}Manage Slots{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Manage Time Slots</h2>
+
+    <!-- Existing Slots -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header">Current Slots</div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Slot Range</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in time_slots %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ slot.slot_range }}</td>
+                        <td>
+                            <!-- Edit Form -->
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="edit">
+                                <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                <input type="text" name="slot_range" value="{{ slot.slot_range }}" required>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </form>
+
+                            <!-- Delete Form -->
+                            <form method="post" style="display:inline;" 
+                                  onsubmit="return confirm('Delete this slot?');">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">No slots available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Slot -->
+    <div class="card shadow-sm">
+        <div class="card-header">Add New Slot</div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <div class="mb-3">
+                    <label for="slot_range" class="form-label">Slot Range</label>
+                    <input type="text" name="slot_range" class="form-control"
+                           placeholder="e.g. 09:00 AM - 01:00 PM" required>
+                </div>
+                <button type="submit" class="btn btn-success">Add Slot</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Holidays Section -->
+<div class="card shadow-sm mt-4">
+  <div class="card-header">Holidays (Disable Dates)</div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="add_holiday">
+      <input type="date" name="holiday_date" required>
+      <button type="submit" class="btn btn-warning">Add Holiday</button>
+    </form>
+
+    <ul class="mt-3">
+      {% for h in holidays %}
+      <li>
+        {{ h.date }}
+        <form method="post" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="delete_holiday">
+          <input type="hidden" name="holiday_id" value="{{ h.id }}">
+          <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+        </form>
+      </li>
+      {% empty %}
+      <li class="text-muted">No holidays set.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<!-- Service Toggle -->
+<div class="card shadow-sm mt-4">
+  <div class="card-header">Service Control</div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="toggle_service">
+      <button type="submit" class="btn btn-{{ staff_org.is_active|yesno:'danger,success' }}">
+        {{ staff_org.is_active|yesno:"Disable Service,Enable Service" }}
+      </button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

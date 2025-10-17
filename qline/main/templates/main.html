@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q-Line | Smart Queue & Appointment System</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Q-Line</h1>
+            <ul>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#actions">Get Started</a></li>
+                <li><a href="#book">Book Appointment</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hidden">
+            <h2>Welcome to Q-Line</h2>
+            <p>
+                Eliminate physical queues and manage your appointments easily through our smart, web-based system.
+            </p>
+        </div>
+    </header>
+
+    <section class="action-container" id="actions">
+        <div class="container">
+            <div class="action-box hidden">
+                <i class="fas fa-user icon"></i>
+                <h3>For Users</h3>
+                <p>Book appointments, choose a time slot, and manage your bookings online.</p>
+                <a href="{% url 'user_register' %}" class="btn">Sign up</a>
+                <a href="{% url 'user_login' %}" class="btn btn-secondary">Login</a>
+            </div>
+
+            <div class="action-box hidden">
+                <i class="fas fa-clipboard-list icon"></i>
+                <h3>For Staff</h3>
+                <p>Register your service, monitor queues, and handle real-time appointments.</p>
+                <a href="{% url 'service_register' %}" class="btn">Register Service</a>
+                <a href="{% url 'staff_login' %}" class="btn btn-secondary">Login</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="book-section" id="book">
+        <div class="container hidden">
+            <h2>Ready to Skip the Line?</h2>
+            <p>Choose your service, select a branch, and get your appointment in seconds.</p>
+            <a href="{% url 'user_register' %}" class="btn btn-large">Book Now</a>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <div class="container hidden">
+            <h2>About Us</h2>
+            <p>
+                Q-Line is designed to simplify and modernize the way people book appointments and manage queues. Our mission is to eliminate the frustration of waiting in long lines by offering a seamless digital solution for everyone.
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Q-Line. All rights reserved. (Nithin)</p>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

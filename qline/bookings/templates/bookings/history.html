@@ -1,0 +1,28 @@
+{% extends "users/base.html" %}
+{% block content %}
+<h2>Appointment History</h2>
+<table>
+    <tr>
+        <th>Sr. No</th>
+        <th>Service</th>
+        <th>Branch</th>
+        <th>Date</th>
+        <th>Time Slot</th>
+        <th>Status</th>
+    </tr>
+    {% for appointment in past_appointments %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ appointment.org.get_service_type_display }}</td>
+        <td>{{ appointment.org.org_name }}</td>
+        <td>{{ appointment.date }}</td>
+        <td>{{ appointment.time_slot }}</td>
+        <td>{{ appointment.status }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6">No history available</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

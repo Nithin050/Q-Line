@@ -1,0 +1,141 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<section id="branch-details">
+    <h2>{{ org.org_name }}</h2>
+    <p><strong>Address:</strong> {{ org.branch_address }}</p>
+    <p><strong>Service:</strong> {{ org.get_service_type_display }}</p>
+
+    <!-- GET form - user enters name, phone, date and clicks Show Slots -->
+    <form method="get" class="get-form">
+        <div class="form-group">
+            <label for="user_name_get">Name:</label>
+            <input type="text" name="user_name" id="user_name_get" required value="{{ pre_name }}">
+        </div>
+
+        <div class="form-group">
+            <label for="phone_get">Phone Number:</label>
+            <input type="text" name="phone" id="phone_get" required value="{{ pre_phone }}">
+        </div>
+
+        <div class="form-group">
+            <label for="date_get">Choose a date:</label>
+            <input type="date" name="date" id="date_get" required min="{{ today|date:'Y-m-d' }}"
+                value="{{ selected_date }}">
+        </div>
+
+        <button type="submit">Show Slots</button>
+    </form>
+
+    
+    {% if selected_date %}
+        {% if holiday %}
+            <div class="holiday-message">
+                <p><strong>No slots are available for this day.</p>
+            </div>
+        {% elif grouped_slots %}
+            <form method="post" class="post-form">
+                {% csrf_token %}
+                
+                <input type="hidden" name="date" value="{{ selected_date }}">
+                <div class="form-group">
+                    <label for="user_name">Name:</label>
+                    <input type="text" name="user_name" id="user_name" required value="{{ pre_name }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="text" name="phone" id="phone" required value="{{ pre_phone }}"
+                        pattern="^[0-9]{10}$"
+                        title="Enter a valid 10-digit phone number">
+                </div>
+
+                <p><strong>Available slots for {{ selected_date }} — pick one:</strong></p>
+
+                <div class="accordion">
+                    {% for group in grouped_slots %}
+                    <details>
+                        <summary>{{ group.group_label }}</summary>
+                        <div class="slots">
+                            {% for slot in group.slots %}
+                                {% if slot.available %}
+                                <label class="slot available">
+                                    <input type="radio" name="selected_slot" value="{{ slot.slot_str }}" required>
+                                    {{ slot.slot_str }}
+                                </label>
+                                {% else %}
+                                <span class="slot booked">{{ slot.slot_str }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </details>
+                    {% endfor %}
+                </div>
+
+                <button type="submit">Book Appointment</button>
+            </form>
+        {% endif %}
+    {% endif %}
+</section>
+
+<style>
+    .form-group {
+        margin-bottom: 12px;
+        display: flex;
+        flex-direction: column;
+        max-width: 400px;
+    }
+
+    label {
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    button {
+        margin-top: 8px;
+        padding: 8px 14px;
+        border-radius: 6px;
+    }
+
+    .accordion details {
+        margin-bottom: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px;
+        max-width: 800px;
+    }
+
+    .slots {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .slot {
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .slot.available {
+        background: #e6ffed;
+        cursor: pointer;
+    }
+
+    .slot.booked {
+        background: #fff0f0;
+        color: #8a1f1f;
+    }
+</style>
+{% endblock %}

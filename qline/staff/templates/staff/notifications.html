@@ -1,0 +1,27 @@
+{% extends "staff/base.html" %}
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Notifications</h2>
+
+    <div class="list-group">
+        {% for appt in recent_appointments %}
+            <div class="list-group-item">
+                <strong>{{ appt.name }}</strong>
+                {% if appt.status == "Booked" %}
+                    booked an appointment at <b>{{ appt.org.org_name }}</b>
+                    on <b>{{ appt.date }}</b> ({{ appt.time_slot }})
+                {% elif appt.status == "Completed" %}
+                    appointment completed on <b>{{ appt.date }}</b> at {{ appt.time_slot }}
+                {% elif appt.status == "Missed" %}
+                    appointment missed on <b>{{ appt.date }}</b> at {{ appt.time_slot }}
+                {% endif %}
+                <div class="text-muted small">{{ appt.updated_at|date:"Y-m-d H:i" }}</div>
+            </div>
+        {% empty %}
+            <p class="text-muted">No notifications yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

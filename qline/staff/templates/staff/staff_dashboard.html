@@ -1,0 +1,85 @@
+{% extends "staff/base.html" %}
+
+{% block title %}Staff Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="text-muted mb-8">Organization: {{ staff_org.org_name }}</h2>
+
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>Today’s Appointments</h5>
+                    <h3>{{ today_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>Upcoming</h5>
+                    <h3>{{ upcoming_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>Completed</h5>
+                    <h3>{{ completed_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>Missed</h5>
+                    <h3>{{ missed_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="card shadow-sm">
+        <div class="card-header">Today’s Appointments</div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Time Slot</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in todays_appointments %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ appt.name }}</td>
+                        <td>{{ appt.phone }}</td>
+                        <td>{{ appt.time_slot }}</td>
+                        <td>
+                            {% if appt.status == "Booked" %}
+                            <a href="{% url 'staff_serve' appt.id %}" class="btn btn-success btn-sm">Serve</a>
+                            <a href="{% url 'staff_skip' appt.id %}" class="btn btn-danger btn-sm">Skip</a>
+                            {% else %}
+                            {{ appt.status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No appointments today.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

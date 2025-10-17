@@ -1,0 +1,13 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<section id="confirm">
+    <h2>Booking Confirmed </h2>
+    <p><strong>Name:</strong> {{ appointment.user.username }}</p>
+    <p><strong>Branch:</strong> {{ appointment.org.org_name }}</p>
+    <p><strong>Address:</strong> {{ appointment.org.branch_address }}</p>
+    <p><strong>Service:</strong> {{ appointment.org.get_service_type_display }}</p>
+    <p><strong>Date:</strong> {{ appointment.date }}</p>
+    <p><strong>Time Slot:</strong> {{ appointment.time_slot }}</p>
+</section>
+{% endblock %}

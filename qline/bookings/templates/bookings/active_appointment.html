@@ -1,0 +1,52 @@
+{% extends "users/base.html" %}
+{% block content %}
+<h2>My Active Appointments</h2>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Service</th>
+                <th>Branch</th>
+                <th>Address</th>
+                <th>Location</th>
+                <th>Booked Date</th>
+                <th>Time Slot</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in active_appointments %}
+            <tr onclick="showDetails('{{ appointment.id }}')" style="cursor:pointer;">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ appointment.org.get_service_type_display }}</td>
+                <td>{{ appointment.org.org_name }}</td>
+                <td>{{ appointment.org.branch_address }}</td>
+                <td>{{ appointment.org.location }}</td>
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.time_slot }}</td>
+                <td>
+                    <form method="post" action="{% url 'cancel_appointment' appointment.id %}"
+                        onsubmit="return confirm('Are you sure you want to cancel this appointment?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">No active appointments</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function showDetails(id) {
+        const row = document.getElementById("details-" + id);
+        row.style.display = (row.style.display === "none" ? "table-row" : "none");
+    }
+</script>
+{% endblock %}

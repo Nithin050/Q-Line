@@ -1,0 +1,60 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<section id="book">
+    <h2>Book an Appointment</h2>
+    <p class="description">
+        Search for a service and location to find available branches near you.
+    </p>
+
+    <!-- Search Form -->
+    <form method="GET" action="">
+        <select name="service_type" required>
+            <option value="clinic" {% if selected_service == "clinic" %}selected{% endif %}>Clinic</option>
+            <option value="consultancy" {% if selected_service == "consultancy" %}selected{% endif %}>Consultancy</option>
+            <option value="salon" {% if selected_service == "salon" %}selected{% endif %}>Salon</option>
+            <option value="hospital" {% if selected_service == "hospital" %}selected{% endif %}>Hospital</option>
+
+        </select>
+
+        <select name="location" required>
+            <option value="mumbai" {% if selected_location == "mumbai" %}selected{% endif %}>Mumbai</option>
+            <option value="delhi" {% if selected_location == "delhi" %}selected{% endif %}>Delhi</option>
+            <option value="bangalore" {% if selected_location == "bangalore" %}selected{% endif %}>Bangalore</option>
+            <option value="pune" {% if selected_location == "pune" %}selected{% endif %}>Pune</option>
+
+        </select>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Branch List (dynamic) -->
+    {% if branches %}
+    <table>
+        <tr>
+            <th>Sl. No</th>
+            <th>Branch Name</th>
+            <th>Address</th>
+            <th>Working Hours</th>
+            <th>Action</th>
+        </tr>
+        {% for branch in branches %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ branch.org_name }}</td> 
+            <td>{{ branch.branch_address }}</td> 
+            <td>{{ branch.working_hours }}</td>
+            <td>
+                <form method="GET" action="{% url 'branch_details' branch.id %}">
+                    <button type="submit" class="check-btn">Check</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p style="text-align:center; margin-top:20px;">No branches found. Try searching above.</p>
+    {% endif %}
+
+</section>
+{% endblock %}

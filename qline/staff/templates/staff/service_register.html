@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Business | Staff</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #343a40;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+        }
+
+        nav h1 {
+            color: white;
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        nav ul li a:hover {
+            color: #d4e6f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.35);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: 600;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            background: #f8f9fa;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        .slot-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .slot-container input {
+            flex: 1;
+        }
+
+        .add-slot-btn,
+        .remove-slot-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #007bff;
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+        }
+
+        .add-slot-btn:hover {
+            color: #0056b3;
+        }
+
+        .remove-slot-btn {
+            color: #dc3545;
+        }
+
+        .remove-slot-btn:hover {
+            color: #a71d2a;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h1>Q-Line Staff</h1>
+        <ul>
+            <li><a href="{% url 'main' %}">Home</a></li>
+            <li><a href="{% url 'staff_login' %}">Login</a></li>
+        </ul>
+    </nav>
+
+
+    <section class="form-section">
+        <div class="container">
+            <h2>Register Business</h2>
+            <form method="post">
+                {% csrf_token %}
+
+                <label>Organization Name:</label>
+                <input type="text" name="org_name" placeholder="Ex: Apollo Clinic"
+                    value="{{ org_data.org_name|default:'' }}" required>
+
+                <label>Service Type:</label>
+                <select name="service_type" required>
+                    <option value="">-- Select Service --</option>
+                    <option value="clinic" {% if org_data.service_type == "clinic" %}selected{% endif %}>Clinic</option>
+                    <option value="salon" {% if org_data.service_type == "salon" %}selected{% endif %}>Salon</option>
+                    <option value="consultancy" {% if org_data.service_type == "consultancy" %}selected{% endif %}>
+                        Consultancy</option>
+                    <option value="hospital" {% if org_data.service_type == "hospital" %}selected{% endif %}>Hospital
+                    </option>
+                </select>
+
+                <label>Location:</label>
+                <select name="location" required>
+                    <option value="">-- Select City --</option>
+                    <option value="Mumbai" {% if org_data.location  == "Mumbai" %}selected{% endif %}>Mumbai</option>
+                    <option value="Delhi" {% if org_data.location == "Delhi" %}selected{% endif %}>Delhi</option>
+                    <option value="bangalore" {% if org_data.location == "bangalore" %}selected{% endif %}>Bangalore
+                    </option>
+                    <option value="Chennai" {% if org_data.location == "Chennai" %}selected{% endif %}>Chennai</option>
+                    <option value="Kolkata" {% if org_data.location == "Kolkata" %}selected{% endif %}>Kolkata</option>
+                </select>
+
+
+                <label>Branch Address:</label>
+                <textarea name="branch_address" placeholder="Ex: 123, MG Road, Bangalore"
+                    required>{{ org_data.branch_address|default:'' }}</textarea>
+
+                <label>Phone Number:</label>
+                <input type="tel" name="phone_number" placeholder="Ex: 9876543210"
+                    value="{{ org_data.phone_number|default:'' }}" pattern="^[0-9]{10}$"
+                    title="Enter 10 digit phone number" required>
+
+                <label>Working Hours:</label>
+                <input type="text" name="working_hours" id="working_hours" placeholder="09:00 AM - 08:00 PM"
+                    value="{{ org_data.working_hours|default:'' }}"
+                    pattern="^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)\s*-\s*(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$"
+                    title="Format: 09:00 AM - 08:00 PM" required>
+
+                <label>Time Slots:</label>
+                <div id="slot-list">
+                    {% if slot_forms %}
+                    {% for sf in slot_forms %}
+                    <div class="slot-container">
+                        <input type="text" name="time_slots[]"
+                            value="{% if sf.data.slot_range %}{{ sf.data.slot_range }}{% elif sf.initial.slot_range %}{{ sf.initial.slot_range }}{% else %}{% endif %}"
+                            placeholder="Ex: 10:00 AM - 01:00 PM"
+                            pattern="^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)\s*-\s*(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$"
+                            title="Format: 10:00 AM - 01:00 PM" required>
+
+                        {% if forloop.last %}
+                        <button type="button" class="add-slot-btn">+</button>
+                        {% else %}
+                        <button type="button" class="remove-slot-btn">×</button>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="slot-container">
+                        <input type="text" name="time_slots[]" placeholder="Ex: 10:00 AM - 01:00 PM" required>
+                        <button type="button" class="add-slot-btn">+</button>
+                    </div>
+                    {% endif %}
+                </div>
+
+
+                <label>Appointment Duration (minutes):</label>
+                <input type="number" name="appointment_duration" placeholder="Ex: 15"
+                    value="{{ org_data.appointment_duration|default:'' }}" min="5" max="240" required>
+
+                <button type="submit">Next</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("add-slot-btn")) {
+                let slotList = document.getElementById("slot-list");
+
+                let newSlot = document.createElement("div");
+                newSlot.classList.add("slot-container");
+
+                newSlot.innerHTML = `
+                    <input type="text" name="time_slots[]" class="time-slot-input"
+                           placeholder="Ex: 02:00 PM - 05:00 PM"
+                           pattern="^(0?[1-9]|1[0-2]):[0-5][0-9]\\s?(AM|PM)\\s*-\\s*(0?[1-9]|1[0-2]):[0-5][0-9]\\s?(AM|PM)$"
+                           title="Format: 02:00 PM - 05:00 PM" required>
+                    <button type="button" class="remove-slot-btn">×</button>
+                `;
+                slotList.appendChild(newSlot);
+            }
+
+            if (e.target.classList.contains("remove-slot-btn")) {
+                e.target.parentElement.remove();
+            }
+        });
+
+        document.getElementById("working_hours").addEventListener("input", function () {
+            const regex = /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)\s*-\s*(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/;
+            if (!regex.test(this.value.trim())) {
+                this.setCustomValidity("Format must be: 09:00 AM - 08:00 PM");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
+    </script>
+
+</body>
+
+</html>
