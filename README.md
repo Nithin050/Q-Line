@@ -29,6 +29,41 @@ Q-Line is a dynamic, web-based smart queue and appointment management system des
 
 To run this project locally, follow these steps:
 
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/Nithin050/Q-Line.git](https://github.com/Nithin050/Q-Line.git)
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/Nithin050/Q-Line.git](https://github.com/Nithin050/Q-Line.git)
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd Q-Line
+    ```
+3.  **Create and activate a virtual environment:**
+    ```bash
+    python -m venv env
+    source env/bin/activate  # On Windows, use `env\Scripts\activate`
+    ```
+4.  **Install the required dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+5.  **Apply the database migrations:**
+    ```bash
+    python manage.py migrate
+    ```
+6.  **Run the development server:**
+    ```bash
+    python manage.py runserver
+    ```
+The application will be available at `http://127.0.0.1:8000`.
+
+
+## Screenshots
+
+**User Dashboard**
+![User Dashboard](user_dashboard.png)
+
+**Booking Page**
+![Booking Page](booking_page.png)
+
+**Staff Dashboard**
+![Staff Dashboard](staff_dashboard.png)
