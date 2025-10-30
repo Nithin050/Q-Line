@@ -41,8 +41,8 @@
         {% for branch in branches %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ branch.org_name }}</td> 
-            <td>{{ branch.branch_address }}</td> 
+            <td>{{ branch.org_name }}</td>
+            <td>{{ branch.branch_address }}</td>
             <td>{{ branch.working_hours }}</td>
             <td>
                 <form method="GET" action="{% url 'branch_details' branch.id %}">

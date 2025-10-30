@@ -1,0 +1,16 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Your local virtual environment
+env/
+venv/
+.venv/
