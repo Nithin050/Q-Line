@@ -15,8 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 5. Copy your entire project code into the container
 COPY . .
 
-# 6. --- ADD THIS NEW STEP ---
-# Run collectstatic to gather all static files
+# 6.Run collectstatic to gather all static files
 RUN python manage.py collectstatic --noinput
 
 # 7. Expose the port Gunicorn will run on
