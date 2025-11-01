@@ -121,18 +121,18 @@ I then securely connected to the new VM via SSH, cloned this repository, and ran
 
 ![SSH:-](qline/deployment_proof/2_ssh_proof.png)
 
-# 1. Clone the repo
+**1. Clone the repo**
 ```bash
 git clone [https://github.com/Nithin050/Q-Line.git](https://github.com/Nithin050/Q-Line.git)
 ```
 
-# 2. Build the image (from within the 'qline' sub-folder)
+**2. Build the image (from within the 'qline' sub-folder)**
 ```bash
 cd Q-Line/qline
 sudo docker build -t q-line-app .
 ```
 
-# 3. Run the container
+**3. Run the container**
 ```bash
 sudo docker run -d -p 80:8000 q-line-app
 ```
